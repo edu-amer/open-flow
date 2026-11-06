@@ -27,7 +27,7 @@ WORKDIR /app
 COPY --from=build /workspace/apps/server/dist/ ./
 RUN mkdir -p /data/open-flow
 
-VOLUME ["/data/open-flow"]
+# Railway rejects Dockerfile VOLUME. Persist this path with a platform volume.
 EXPOSE 3000
 STOPSIGNAL SIGTERM
 HEALTHCHECK --interval=10s --timeout=3s --start-period=10s --retries=3 CMD ["node", "-e", "fetch(`http://127.0.0.1:${process.env.OPEN_FLOW_PORT ?? 3000}/healthz`).then((response) => { if (!response.ok) process.exit(1) }).catch(() => process.exit(1))"]
